@@ -1,0 +1,9 @@
+version: "2"
+
+sql:
+  - engine: "postgresql"
+    queries: "./infrastructure/repository/postgres/queries/"
+    schema: "./infrastructure/repository/postgres/schema/"
+    gen:
+      go:
+        out: "./infrastructure/repository/postgres/sqlc/"
