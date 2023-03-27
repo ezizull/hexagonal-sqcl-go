@@ -3,7 +3,6 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
 	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
 )
@@ -24,15 +23,15 @@ var (
 )
 
 // NewSqlc is a function that returns a sqlc database connection
-func NewSqlc() *sqlc.Queries {
+func NewSqlc() (*sqlc.Queries, error) {
 	dbURL := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable TimeZone=Asia/Jakarta",
 		host, port, username, password, dbname)
 
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		log.Fatal("Cannot connect to PostgresDB:", err)
+		return nil, err
 	}
 
 	queries := sqlc.New(db)
-	return queries
+	return queries, nil
 }

@@ -1,9 +1,9 @@
 
 
 -- name: GetTodosByActivity :many
-SELECT * FROM activities a
-JOIN todos t ON a.id = t.activity_group_id
-WHERE a.id = $1
+SELECT *
+FROM todos
+WHERE ($1::int IS NULL OR activity_group_id = $1)
 ORDER BY id DESC;
 
 -- name: GetSingleTodos :many
