@@ -18,7 +18,7 @@
     "JWTRefreshTimeHour": 10
   },
   "Endpoints": {
-    "SiteExample": "http://localhost:8080/"
+    "SiteExample": "http://localhost:3030/"
   },
   "Tools": {
     "WkhtmltopdfBin": "/opt/bin/wkhtmltopdf"
