@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-
 	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
+	"skyshi-gethired.go/infrastructure/restapi/controllers"
 )
 
 type Controller struct {
@@ -21,6 +21,19 @@ func (c *Controller) GetTodos(ctx *gin.Context) {
 		activityGroupID = 0
 	}
 
-	todos, err := c.TodoService.GetTodosByActivity(ctx, int32(activityGroupID))
-	ctx.JSON(http.StatusAccepted, todos)
+	todoResp, err := c.TodoService.GetTodosByActivity(ctx, int32(activityGroupID))
+	if err != nil {
+		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
+			Status:  "error",
+			Message: err.Error(),
+		})
+		return
+	}
+
+	todos := arrayToDomainMapper(todoResp)
+	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+		Status:  "success",
+		Message: "success",
+		Data:    todos,
+	})
 }

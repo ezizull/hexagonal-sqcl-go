@@ -1,20 +1,20 @@
 package todo
 
-import "database/sql"
-
+import (
+	"database/sql"
+	"time"
+)
 
 type Todo struct {
-	ID              int64 `json:"id"`
-	ActivityGroupID sql.NullInt32 `json:"activity_group_id" example:"1"`
-	Title           sql.NullString `json:"title" example:"title todo"`
-	IsActive        sql.NullBool `json:"is_active" example:"false"`
-	Priority        sql.NullString `json:"priority" example:"very-high"`
-	CreatedAt       sql.NullTime
-	UpdatedAt       sql.NullTime
+	ID              int64  `json:"id"`
+	ActivityGroupID int32  `json:"activity_group_id" example:"1"`
+	Title           string `json:"title" example:"title todo"`
+	IsActive        bool   `json:"is_active" example:"false"`
+	Priority        string `json:"priority" example:"very-high"`
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
 	DeletedAt       sql.NullTime
 }
-
-
 
 // Service is a interface that contains the methods for the book service
 type Service interface {

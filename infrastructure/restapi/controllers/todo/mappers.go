@@ -4,10 +4,11 @@ import (
 	"database/sql"
 
 	domainTodo "skyshi-gethired.go/domain/todo"
+	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
 )
 
-func (todo *Todo) ToDomainMapper() *domainTodo.Todo {
-	return &domainTodo.Todo{
+func toDomainMapper(todo sqlc.Todo) domainTodo.Todo {
+	return domainTodo.Todo{
 		ID:              todo.ID,
 		Title:           todo.Title.String,
 		ActivityGroupID: todo.ActivityGroupID.Int32,
@@ -17,8 +18,8 @@ func (todo *Todo) ToDomainMapper() *domainTodo.Todo {
 	}
 }
 
-func FromDomainMapper(todo *domainTodo.Todo) *Todo {
-	return &Todo{
+func fromDomainMapper(todo domainTodo.Todo) sqlc.Todo {
+	return sqlc.Todo{
 		ID:              todo.ID,
 		ActivityGroupID: sql.NullInt32{Int32: int32(todo.ActivityGroupID), Valid: true},
 		Title:           sql.NullString{String: todo.Title, Valid: true},
@@ -29,11 +30,11 @@ func FromDomainMapper(todo *domainTodo.Todo) *Todo {
 	}
 }
 
-func ArrayToDomainMapper(todos *[]Todo) *[]domainTodo.Todo {
-	todosDomain := make([]domainTodo.Todo, len(*todos))
-	for i, todo := range *todos {
-		todosDomain[i] = *todo.ToDomainMapper()
+func arrayToDomainMapper(Todo []sqlc.Todo) []domainTodo.Todo {
+	var todos []domainTodo.Todo
+	for _, todoResp := range Todo {
+		todo := toDomainMapper(todoResp)
+		todos = append(todos, todo)
 	}
-
-	return &todosDomain
+	return todos
 }
