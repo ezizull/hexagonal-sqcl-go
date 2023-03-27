@@ -8,7 +8,7 @@ import (
 func TodoRoutes(router *gin.Engine, controller *todoController.Controller) {
 	routerTodo := router.Group("/todo-items")
 	{
-		routerTodo.POST("", controller.GetTodos)
+		routerTodo.GET("", controller.GetTodos)
 	}
 
 }
