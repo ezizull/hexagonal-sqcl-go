@@ -8,7 +8,7 @@ import (
 	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
 )
 
-// DB cradential
+// Database cradential
 var (
 	// host     = os.Getenv("DB_HOST")
 	// port     = os.Getenv("DB_PORT")
@@ -23,7 +23,8 @@ var (
 	dbname   = "skyshi_gethired"
 )
 
-func New() *sqlc.Queries {
+// NewSqlc is a function that returns a sqlc database connection
+func NewSqlc() *sqlc.Queries {
 	dbURL := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable TimeZone=Asia/Jakarta",
 		host, port, username, password, dbname)
 
