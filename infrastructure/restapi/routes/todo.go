@@ -5,7 +5,7 @@ import (
 	todoController "skyshi-gethired.go/infrastructure/restapi/controllers/todo"
 )
 
-func TodoRoutes(router *gin.RouterGroup, controller *todoController.Controller) {
+func TodoRoutes(router *gin.Engine, controller *todoController.Controller) {
 	routerTodo := router.Group("/todo-items")
 	{
 		routerTodo.POST("", controller.GetTodos)

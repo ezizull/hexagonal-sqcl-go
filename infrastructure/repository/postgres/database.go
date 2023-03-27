@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	_ "github.com/lib/pq"
 	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
 )
 
