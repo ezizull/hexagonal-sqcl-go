@@ -15,12 +15,8 @@ type Todo struct {
 }
 
 // Service is a interface that contains the methods for the book service
-type Service interface {
-	Get(int) (*Todo, error)
-	GetAll() ([]*Todo, error)
-	Create(*Todo) error
-	GetByMap(map[string]interface{}) map[string]interface{}
-	GetByID(int) (*Todo, error)
-	Delete(int) error
-	Update(int, map[string]interface{}) (*Todo, error)
+type NewTodo struct {
+	ActivityGroupID *int32  `json:"activity_group_id" example:"1"`
+	Title           *string `json:"title" example:"title todo"`
+	IsActive        *bool   `json:"is_active" example:"false"`
 }
