@@ -140,19 +140,41 @@ func (q *Queries) GetTodosByID(ctx context.Context, id int64) (Todo, error) {
 	return i, err
 }
 
-const updateTodo = `-- name: UpdateTodo :exec
-INSERT INTO todos (activity_group_id, title, is_active)
-VALUES ($1, $2, $3)
+const updateTodo = `-- name: UpdateTodo :one
+UPDATE todos
+SET 
+    title = COALESCE($1, title),
+    priority = COALESCE($2, priority),
+    is_active = COALESCE($3, is_active),
+    updated_at = now()
+WHERE id = $4
 RETURNING id, activity_group_id, title, is_active, priority, created_at, updated_at, deleted_at
 `
 
 type UpdateTodoParams struct {
-	ActivityGroupID sql.NullInt32
-	Title           sql.NullString
-	IsActive        sql.NullBool
+	Title    sql.NullString
+	Priority sql.NullString
+	IsActive sql.NullBool
+	ID       int64
 }
 
-func (q *Queries) UpdateTodo(ctx context.Context, arg UpdateTodoParams) error {
-	_, err := q.db.ExecContext(ctx, updateTodo, arg.ActivityGroupID, arg.Title, arg.IsActive)
-	return err
+func (q *Queries) UpdateTodo(ctx context.Context, arg UpdateTodoParams) (Todo, error) {
+	row := q.db.QueryRowContext(ctx, updateTodo,
+		arg.Title,
+		arg.Priority,
+		arg.IsActive,
+		arg.ID,
+	)
+	var i Todo
+	err := row.Scan(
+		&i.ID,
+		&i.ActivityGroupID,
+		&i.Title,
+		&i.IsActive,
+		&i.Priority,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+	)
+	return i, err
 }

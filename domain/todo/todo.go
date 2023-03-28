@@ -14,9 +14,14 @@ type Todo struct {
 	UpdatedAt       time.Time
 }
 
-// Service is a interface that contains the methods for the book service
 type NewTodo struct {
 	ActivityGroupID *int32  `json:"activity_group_id" example:"1"`
 	Title           *string `json:"title" example:"title todo"`
 	IsActive        *bool   `json:"is_active" example:"false"`
+}
+
+type UpdateTodo struct {
+	Title    *string `json:"title,omitempty" example:"title todo"`
+	Priority *string `json:"priority,omitempty" example:"very-high"`
+	IsActive *bool   `json:"is_active,omitempty" example:"false"`
 }

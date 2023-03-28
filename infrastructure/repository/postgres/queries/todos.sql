@@ -18,7 +18,12 @@ INSERT INTO todos (activity_group_id, title, is_active, priority)
 VALUES ($1, $2, $3, $4)
 RETURNING *;
 
--- name: UpdateTodo :exec
-INSERT INTO todos (activity_group_id, title, is_active)
-VALUES ($1, $2, $3)
+-- name: UpdateTodo :one
+UPDATE todos
+SET 
+    title = COALESCE($1, title),
+    priority = COALESCE($2, priority),
+    is_active = COALESCE($3, is_active),
+    updated_at = now()
+WHERE id = $4
 RETURNING *;

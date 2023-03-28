@@ -28,7 +28,7 @@ func (c *Controller) GetTodos(ctx *gin.Context) {
 		activityGroupID := utils.ConvertToNullInt32(activityGroupIDStr)
 		todoResp, err = c.TodoService.GetTodosByActivity(ctx, activityGroupID)
 		if err != nil {
-			ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
+			ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
 				Status:  "Error",
 				Message: err.Error(),
 			})
@@ -38,7 +38,7 @@ func (c *Controller) GetTodos(ctx *gin.Context) {
 
 	todoResp, err = c.TodoService.GetAllTodos(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
 			Status:  "Error",
 			Message: err.Error(),
 		})
@@ -63,7 +63,7 @@ func (c *Controller) GetSingleTodo(ctx *gin.Context) {
 	todoIDStr := ctx.Param("id")
 	todoID, err := strconv.ParseInt(todoIDStr, 10, 64)
 	if err != nil {
-		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
 			Status:  "Not Found",
 			Message: ("Todo with ID " + todoIDStr + " Not Found"),
 		})
@@ -72,7 +72,7 @@ func (c *Controller) GetSingleTodo(ctx *gin.Context) {
 
 	todoResp, err = c.TodoService.GetTodosByID(ctx, int64(todoID))
 	if err != nil {
-		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
 			Status:  "Not Found",
 			Message: ("Todo with ID " + todoIDStr + " Not Found"),
 		})
@@ -95,43 +95,27 @@ func (c *Controller) CreateSingleTodo(ctx *gin.Context) {
 		err      error
 	)
 
-	// Get body data for newtodo
-	_ = ctx.BindJSON(&todoBody)
-
-	if todoBody.Title == nil {
-		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
+	// validation create todo body
+	todoBody, message := createValidation(ctx)
+	if message != "" {
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
 			Status:  "Bad Request",
-			Message: ("title cannot be null"),
-		})
-		return
-	}
-
-	if todoBody.ActivityGroupID == nil || *todoBody.ActivityGroupID == 0 {
-		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
-			Status:  "Bad Request",
-			Message: ("activity_group_id cannot be null"),
-		})
-		return
-	}
-
-	if todoBody.IsActive == nil {
-		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
-			Status:  "Bad Request",
-			Message: ("is_active cannot be null"),
+			Message: (message + " cannot be null"),
 		})
 		return
 	}
 
 	todoResp, err = c.TodoService.CreateTodo(ctx, fromNewDomainMapper(&todoBody, "very-high"))
 	if todoResp.ID == 0 {
-		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
 			Status:  "Not Found",
 			Message: ("Activity Group with ID " + strconv.Itoa(int(*todoBody.ActivityGroupID)) + " Not Found"),
 		})
 		return
 	}
+
 	if err != nil {
-		ctx.JSON(http.StatusAccepted, controllers.ErrorResponse{
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
 			Status:  "Error",
 			Message: err.Error(),
 		})
@@ -146,4 +130,55 @@ func (c *Controller) CreateSingleTodo(ctx *gin.Context) {
 	})
 }
 
-// UpdateTodo function update a todo based updatetodo body
+// UpdateSingleTodo function update a single todo based updatetodo body
+func (c *Controller) UpdateSingleTodo(ctx *gin.Context) {
+	var (
+		todoBody domainTodo.UpdateTodo
+		todoResp sqlc.Todo
+	)
+
+	todoIDStr := ctx.Param("id")
+	todoID, err := strconv.ParseInt(todoIDStr, 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
+			Status:  "Not Found",
+			Message: ("Todo with ID " + todoIDStr + " Not Found"),
+		})
+		return
+	}
+
+	// Get body data for updatetodo
+	err = ctx.BindJSON(&todoBody)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
+			Status:  "Error",
+			Message: err.Error(),
+		})
+		return
+	}
+
+	// Get single todo for
+	todoResp, err = c.TodoService.UpdateTodo(ctx, fromUpdateDomainMapper(&todoBody, int64(todoID)))
+	if todoResp.ID == 0 {
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
+			Status:  "Not Found",
+			Message: ("Todo with ID " + strconv.Itoa(int(todoID)) + " Not Found"),
+		})
+		return
+	}
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
+			Status:  "Error",
+			Message: err.Error(),
+		})
+		return
+	}
+
+	todos := toDomainMapper(todoResp)
+	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+		Status:  "Success",
+		Message: "Success",
+		Data:    todos,
+	})
+}

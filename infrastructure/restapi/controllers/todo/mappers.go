@@ -7,6 +7,24 @@ import (
 	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
 )
 
+func fromUpdateDomainMapper(todo *domainTodo.UpdateTodo, id int64) (updateTodoParams sqlc.UpdateTodoParams) {
+	updateTodoParams.ID = id
+
+	if todo.Title != nil {
+		updateTodoParams.Title = sql.NullString{String: *todo.Title, Valid: true}
+	}
+
+	if todo.Priority != nil {
+		updateTodoParams.Priority = sql.NullString{String: *todo.Priority, Valid: true}
+	}
+
+	if todo.IsActive != nil {
+		updateTodoParams.IsActive = sql.NullBool{Bool: *todo.IsActive, Valid: true}
+	}
+
+	return updateTodoParams
+}
+
 func fromNewDomainMapper(todo *domainTodo.NewTodo, todoPriority string) sqlc.CreateTodoParams {
 	return sqlc.CreateTodoParams{
 		ActivityGroupID: sql.NullInt32{Int32: int32(*todo.ActivityGroupID), Valid: true},
