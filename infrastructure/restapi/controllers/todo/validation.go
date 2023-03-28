@@ -23,9 +23,3 @@ func createValidation(ctx *gin.Context) (todoBody domainTodo.NewTodo, message st
 
 	return todoBody, message
 }
-
-func updateValidation(ctx *gin.Context) (todoBody domainTodo.UpdateTodo, message string) {
-	// Get body data for newtodo
-
-	return todoBody, message
-}
