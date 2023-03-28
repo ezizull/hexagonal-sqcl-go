@@ -17,6 +17,6 @@ type NewActivity struct {
 	Email *string `json:"email" example:"activity@email.com"`
 }
 
-type UpdateTodo struct {
-	Title string `json:"title" example:"title activity"`
+type UpdateActivity struct {
+	Title *string `json:"title" example:"title activity"`
 }

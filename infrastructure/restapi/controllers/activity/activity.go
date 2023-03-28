@@ -106,3 +106,56 @@ func (c *Controller) CreateSingleActivity(ctx *gin.Context) {
 		Data:    activitys,
 	})
 }
+
+// UpdateSingleActivity function update a single activity based updateactivity body
+func (c *Controller) UpdateSingleActivity(ctx *gin.Context) {
+	var (
+		activityBody domainActivity.UpdateActivity
+		activityResp sqlc.Activity
+	)
+
+	activityIDStr := ctx.Param("id")
+	activityID, err := strconv.ParseInt(activityIDStr, 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
+			Status:  "Not Found",
+			Message: ("Activity with ID " + activityIDStr + " Not Found"),
+		})
+		return
+	}
+
+	// validation update activity body
+	activityBody, message := updateValidation(ctx)
+	if message != "" {
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
+			Status:  "Bad Request",
+			Message: (message + " cannot be null"),
+		})
+		return
+	}
+
+	// Get single activity for
+	activityResp, err = c.ActivityService.UpdateActivity(ctx, fromUpdateDomainMapper(&activityBody, int64(activityID)))
+	if activityResp.ID == 0 {
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
+			Status:  "Not Found",
+			Message: ("Activity with ID " + strconv.Itoa(int(activityID)) + " Not Found"),
+		})
+		return
+	}
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
+			Status:  "Error",
+			Message: err.Error(),
+		})
+		return
+	}
+
+	activitys := toDomainMapper(activityResp)
+	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+		Status:  "Success",
+		Message: "Success",
+		Data:    activitys,
+	})
+}

@@ -7,6 +7,13 @@ import (
 	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
 )
 
+func fromUpdateDomainMapper(todo *domainActivity.UpdateActivity, id int64) sqlc.UpdateActivityParams {
+	return sqlc.UpdateActivityParams{
+		ID:    id,
+		Title: sql.NullString{String: *todo.Title, Valid: true},
+	}
+}
+
 func fromNewDomainMapper(todo *domainActivity.NewActivity, todoPriority string) sqlc.CreateActivityParams {
 	return sqlc.CreateActivityParams{
 		Title: sql.NullString{String: *todo.Title, Valid: true},

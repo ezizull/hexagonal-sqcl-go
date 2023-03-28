@@ -11,6 +11,7 @@ func ActivityRoutes(router *gin.Engine, controller *activityController.Controlle
 		routerTodo.GET("", controller.GetActivities)
 		routerTodo.GET("/:id", controller.GetSingleActivity)
 		routerTodo.POST("", controller.CreateSingleActivity)
+		routerTodo.PATCH("/:id", controller.UpdateSingleActivity)
 	}
 
 }

@@ -89,3 +89,31 @@ func (q *Queries) GetActivityByID(ctx context.Context, id int64) (Activity, erro
 	)
 	return i, err
 }
+
+const updateActivity = `-- name: UpdateActivity :one
+UPDATE activities
+SET 
+    title = $2,
+    updated_at = now()
+WHERE id = $1
+RETURNING id, title, email, created_at, updated_at, deleted_at
+`
+
+type UpdateActivityParams struct {
+	ID    int64
+	Title sql.NullString
+}
+
+func (q *Queries) UpdateActivity(ctx context.Context, arg UpdateActivityParams) (Activity, error) {
+	row := q.db.QueryRowContext(ctx, updateActivity, arg.ID, arg.Title)
+	var i Activity
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Email,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+	)
+	return i, err
+}

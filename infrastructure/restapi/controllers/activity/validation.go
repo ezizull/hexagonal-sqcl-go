@@ -19,3 +19,14 @@ func createValidation(ctx *gin.Context) (activityBody domainActivity.NewActivity
 
 	return activityBody, message
 }
+
+func updateValidation(ctx *gin.Context) (activityBody domainActivity.UpdateActivity, message string) {
+	// Get body data for newtodo
+	_ = ctx.BindJSON(&activityBody)
+
+	if activityBody.Title == nil {
+		return activityBody, "title"
+	}
+
+	return activityBody, message
+}
