@@ -38,13 +38,13 @@ func (q *Queries) CreateTodo(ctx context.Context, arg CreateTodoParams) (Todo, e
 	return i, err
 }
 
-const getSingleTodos = `-- name: GetSingleTodos :many
+const getAllTodos = `-- name: GetAllTodos :many
 SELECT id, activity_group_id, title, is_active, priority, created_at, updated_at, deleted_at FROM todos
-WHERE id = $1
+ORDER BY id DESC
 `
 
-func (q *Queries) GetSingleTodos(ctx context.Context, id int64) ([]Todo, error) {
-	rows, err := q.db.QueryContext(ctx, getSingleTodos, id)
+func (q *Queries) GetAllTodos(ctx context.Context) ([]Todo, error) {
+	rows, err := q.db.QueryContext(ctx, getAllTodos)
 	if err != nil {
 		return nil, err
 	}
@@ -76,14 +76,13 @@ func (q *Queries) GetSingleTodos(ctx context.Context, id int64) ([]Todo, error) 
 }
 
 const getTodosByActivity = `-- name: GetTodosByActivity :many
-SELECT id, activity_group_id, title, is_active, priority, created_at, updated_at, deleted_at
-FROM todos
-WHERE ($1::int IS NULL OR activity_group_id = $1)
+SELECT id, activity_group_id, title, is_active, priority, created_at, updated_at, deleted_at FROM todos
+WHERE activity_group_id = $1
 ORDER BY id DESC
 `
 
-func (q *Queries) GetTodosByActivity(ctx context.Context, dollar_1 int32) ([]Todo, error) {
-	rows, err := q.db.QueryContext(ctx, getTodosByActivity, dollar_1)
+func (q *Queries) GetTodosByActivity(ctx context.Context, activityGroupID sql.NullInt32) ([]Todo, error) {
+	rows, err := q.db.QueryContext(ctx, getTodosByActivity, activityGroupID)
 	if err != nil {
 		return nil, err
 	}
@@ -112,4 +111,25 @@ func (q *Queries) GetTodosByActivity(ctx context.Context, dollar_1 int32) ([]Tod
 		return nil, err
 	}
 	return items, nil
+}
+
+const getTodosByID = `-- name: GetTodosByID :one
+SELECT id, activity_group_id, title, is_active, priority, created_at, updated_at, deleted_at FROM todos
+WHERE id = $1
+`
+
+func (q *Queries) GetTodosByID(ctx context.Context, id int64) (Todo, error) {
+	row := q.db.QueryRowContext(ctx, getTodosByID, id)
+	var i Todo
+	err := row.Scan(
+		&i.ID,
+		&i.ActivityGroupID,
+		&i.Title,
+		&i.IsActive,
+		&i.Priority,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+	)
+	return i, err
 }

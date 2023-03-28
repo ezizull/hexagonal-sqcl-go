@@ -1,12 +1,15 @@
 
 
--- name: GetTodosByActivity :many
-SELECT *
-FROM todos
-WHERE ($1::int IS NULL OR activity_group_id = $1)
+-- name: GetAllTodos :many
+SELECT * FROM todos
 ORDER BY id DESC;
 
--- name: GetSingleTodos :many
+-- name: GetTodosByActivity :many
+SELECT * FROM todos
+WHERE activity_group_id = $1
+ORDER BY id DESC;
+
+-- name: GetTodosByID :one
 SELECT * FROM todos
 WHERE id = $1;
 

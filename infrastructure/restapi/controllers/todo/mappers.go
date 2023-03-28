@@ -7,8 +7,8 @@ import (
 	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
 )
 
-func toDomainMapper(todo sqlc.Todo) domainTodo.Todo {
-	return domainTodo.Todo{
+func toDomainMapper(todo sqlc.Todo) *domainTodo.Todo {
+	return &domainTodo.Todo{
 		ID:              todo.ID,
 		Title:           todo.Title.String,
 		ActivityGroupID: todo.ActivityGroupID.Int32,
@@ -18,8 +18,8 @@ func toDomainMapper(todo sqlc.Todo) domainTodo.Todo {
 	}
 }
 
-func fromDomainMapper(todo domainTodo.Todo) sqlc.Todo {
-	return sqlc.Todo{
+func fromDomainMapper(todo domainTodo.Todo) *sqlc.Todo {
+	return &sqlc.Todo{
 		ID:              todo.ID,
 		ActivityGroupID: sql.NullInt32{Int32: int32(todo.ActivityGroupID), Valid: true},
 		Title:           sql.NullString{String: todo.Title, Valid: true},
@@ -30,8 +30,8 @@ func fromDomainMapper(todo domainTodo.Todo) sqlc.Todo {
 	}
 }
 
-func arrayToDomainMapper(Todo []sqlc.Todo) []domainTodo.Todo {
-	var todos []domainTodo.Todo
+func arrayToDomainMapper(Todo []sqlc.Todo) []*domainTodo.Todo {
+	var todos []*domainTodo.Todo
 	for _, todoResp := range Todo {
 		todo := toDomainMapper(todoResp)
 		todos = append(todos, todo)

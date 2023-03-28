@@ -1,7 +1,6 @@
 package todo
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -13,7 +12,6 @@ type Todo struct {
 	Priority        string `json:"priority" example:"very-high"`
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
-	DeletedAt       sql.NullTime
 }
 
 // Service is a interface that contains the methods for the book service
