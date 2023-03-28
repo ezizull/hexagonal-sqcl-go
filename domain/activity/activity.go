@@ -13,8 +13,8 @@ type Activity struct {
 }
 
 type NewActivity struct {
-	Title string `json:"title" example:"title activity"`
-	Email string `json:"email" example:"activity@email.com"`
+	Title *string `json:"title" example:"title activity"`
+	Email *string `json:"email" example:"activity@email.com"`
 }
 
 type UpdateTodo struct {

@@ -9,6 +9,8 @@ func ActivityRoutes(router *gin.Engine, controller *activityController.Controlle
 	routerTodo := router.Group("/activity-groups")
 	{
 		routerTodo.GET("", controller.GetActivities)
+		routerTodo.GET("/:id", controller.GetSingleActivity)
+		routerTodo.POST("", controller.CreateSingleActivity)
 	}
 
 }
