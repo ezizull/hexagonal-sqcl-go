@@ -44,6 +44,18 @@ func (q *Queries) CreateTodo(ctx context.Context, arg CreateTodoParams) (Todo, e
 	return i, err
 }
 
+const deleteTodo = `-- name: DeleteTodo :one
+DELETE FROM todos
+WHERE id = $1
+RETURNING id
+`
+
+func (q *Queries) DeleteTodo(ctx context.Context, id int64) (int64, error) {
+	row := q.db.QueryRowContext(ctx, deleteTodo, id)
+	err := row.Scan(&id)
+	return id, err
+}
+
 const getAllTodos = `-- name: GetAllTodos :many
 SELECT id, activity_group_id, title, is_active, priority, created_at, updated_at, deleted_at FROM todos
 ORDER BY id DESC

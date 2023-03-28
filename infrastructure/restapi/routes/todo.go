@@ -12,6 +12,7 @@ func TodoRoutes(router *gin.Engine, controller *todoController.Controller) {
 		routerTodo.GET("/:id", controller.GetSingleTodo)
 		routerTodo.POST("", controller.CreateSingleTodo)
 		routerTodo.PATCH("/:id", controller.UpdateSingleTodo)
+		routerTodo.DELETE("/:id", controller.DeleteSingleTodo)
 	}
 
 }

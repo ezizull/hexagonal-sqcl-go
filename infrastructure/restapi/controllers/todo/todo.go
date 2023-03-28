@@ -182,3 +182,31 @@ func (c *Controller) UpdateSingleTodo(ctx *gin.Context) {
 		Data:    todos,
 	})
 }
+
+// DeleteSingleTodo function delete a single todo based id
+func (c *Controller) DeleteSingleTodo(ctx *gin.Context) {
+	todoIDStr := ctx.Param("id")
+	todoID, err := strconv.ParseInt(todoIDStr, 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
+			Status:  "Not Found",
+			Message: ("Todo with ID " + todoIDStr + " Not Found"),
+		})
+		return
+	}
+
+	respID, err := c.TodoService.DeleteTodo(ctx, todoID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
+			Status:  "Not Found",
+			Message: ("Todo with ID " + strconv.Itoa(int(respID)) + " Not Found"),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+		Status:  "Success",
+		Message: "Success",
+		Data:    gin.H{},
+	})
+}
