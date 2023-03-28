@@ -4,12 +4,13 @@ import (
 	"net/http"
 	"strconv"
 
-	domainTodo "skyshi-gethired.go/domain/todo"
+	domainTodo "hexagonal-sqlc/domain/todo"
+
+	"hexagonal-sqlc/infrastructure/repository/postgres/sqlc"
+	"hexagonal-sqlc/infrastructure/restapi/controllers"
+	"hexagonal-sqlc/utils"
 
 	"github.com/gin-gonic/gin"
-	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
-	"skyshi-gethired.go/infrastructure/restapi/controllers"
-	"skyshi-gethired.go/utils"
 )
 
 type Controller struct {

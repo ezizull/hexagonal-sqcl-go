@@ -1,4 +1,4 @@
-module skyshi-gethired.go
+module hexagonal-sqlc
 
 go 1.20
 

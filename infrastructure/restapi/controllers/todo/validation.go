@@ -1,8 +1,9 @@
 package todo
 
 import (
+	domainTodo "hexagonal-sqlc/domain/todo"
+
 	"github.com/gin-gonic/gin"
-	domainTodo "skyshi-gethired.go/domain/todo"
 )
 
 func createValidation(ctx *gin.Context) (todoBody domainTodo.NewTodo, message string) {

@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 
+	"hexagonal-sqlc/infrastructure/repository/postgres/sqlc"
+
 	_ "github.com/lib/pq"
-	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
 )
 
 // Database cradential

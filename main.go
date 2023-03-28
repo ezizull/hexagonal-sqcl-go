@@ -6,15 +6,16 @@ import (
 	"strings"
 	"time"
 
+	"hexagonal-sqlc/infrastructure/repository/postgres"
+	"hexagonal-sqlc/infrastructure/restapi/middlewares"
+	"hexagonal-sqlc/infrastructure/restapi/routes"
+
 	limit "github.com/aviddiviner/gin-limit"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"skyshi-gethired.go/infrastructure/repository/postgres"
-	"skyshi-gethired.go/infrastructure/restapi/middlewares"
-	"skyshi-gethired.go/infrastructure/restapi/routes"
 
-	errorsController "skyshi-gethired.go/infrastructure/restapi/controllers/errors"
+	errorsController "hexagonal-sqlc/infrastructure/restapi/controllers/errors"
 )
 
 func main() {

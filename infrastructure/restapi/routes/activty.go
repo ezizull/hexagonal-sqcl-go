@@ -1,8 +1,9 @@
 package routes
 
 import (
+	activityController "hexagonal-sqlc/infrastructure/restapi/controllers/activity"
+
 	"github.com/gin-gonic/gin"
-	activityController "skyshi-gethired.go/infrastructure/restapi/controllers/activity"
 )
 
 func ActivityRoutes(router *gin.Engine, controller *activityController.Controller) {

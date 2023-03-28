@@ -1,8 +1,8 @@
 package adapter
 
 import (
-	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
-	todoController "skyshi-gethired.go/infrastructure/restapi/controllers/todo"
+	"hexagonal-sqlc/infrastructure/repository/postgres/sqlc"
+	todoController "hexagonal-sqlc/infrastructure/restapi/controllers/todo"
 )
 
 func TodoAdapter(db *sqlc.Queries) *todoController.Controller {

@@ -1,8 +1,9 @@
 package activity
 
 import (
+	domainActivity "hexagonal-sqlc/domain/activity"
+
 	"github.com/gin-gonic/gin"
-	domainActivity "skyshi-gethired.go/domain/activity"
 )
 
 func createValidation(ctx *gin.Context) (activityBody domainActivity.NewActivity, message string) {

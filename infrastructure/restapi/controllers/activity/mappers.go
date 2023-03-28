@@ -3,8 +3,8 @@ package activity
 import (
 	"database/sql"
 
-	domainActivity "skyshi-gethired.go/domain/activity"
-	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
+	domainActivity "hexagonal-sqlc/domain/activity"
+	"hexagonal-sqlc/infrastructure/repository/postgres/sqlc"
 )
 
 func fromUpdateDomainMapper(todo *domainActivity.UpdateActivity, id int64) sqlc.UpdateActivityParams {

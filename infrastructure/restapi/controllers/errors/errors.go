@@ -4,7 +4,7 @@ package errors
 import (
 	"net/http"
 
-	domainErrors "skyshi-gethired.go/domain/errors"
+	domainErrors "hexagonal-sqlc/domain/errors"
 
 	"github.com/gin-gonic/gin"
 )

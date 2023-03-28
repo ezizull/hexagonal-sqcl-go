@@ -3,8 +3,8 @@ package todo
 import (
 	"database/sql"
 
-	domainTodo "skyshi-gethired.go/domain/todo"
-	"skyshi-gethired.go/infrastructure/repository/postgres/sqlc"
+	domainTodo "hexagonal-sqlc/domain/todo"
+	"hexagonal-sqlc/infrastructure/repository/postgres/sqlc"
 )
 
 func fromUpdateDomainMapper(todo *domainTodo.UpdateTodo, id int64) (updateTodoParams sqlc.UpdateTodoParams) {

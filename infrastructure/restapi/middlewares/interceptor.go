@@ -7,11 +7,11 @@ import (
 	"io"
 	"time"
 
-	"skyshi-gethired.go/application/services"
+	"hexagonal-sqlc/application/services"
 
 	"github.com/gin-gonic/gin"
 
-	"skyshi-gethired.go/utils"
+	"hexagonal-sqlc/utils"
 )
 
 type bodyLogWriter struct {

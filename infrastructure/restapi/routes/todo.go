@@ -1,8 +1,9 @@
 package routes
 
 import (
+	todoController "hexagonal-sqlc/infrastructure/restapi/controllers/todo"
+
 	"github.com/gin-gonic/gin"
-	todoController "skyshi-gethired.go/infrastructure/restapi/controllers/todo"
 )
 
 func TodoRoutes(router *gin.Engine, controller *todoController.Controller) {
