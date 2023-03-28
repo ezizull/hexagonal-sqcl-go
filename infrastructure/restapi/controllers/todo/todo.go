@@ -35,6 +35,14 @@ func (c *Controller) GetTodos(ctx *gin.Context) {
 			})
 			return
 		}
+
+		todos := arrayToDomainMapper(todoResp)
+		ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+			Status:  "Success",
+			Message: "Success",
+			Data:    todos,
+		})
+		return
 	}
 
 	todoResp, err = c.TodoService.GetAllTodos(ctx)
