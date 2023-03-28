@@ -12,6 +12,7 @@ func ActivityRoutes(router *gin.Engine, controller *activityController.Controlle
 		routerTodo.GET("/:id", controller.GetSingleActivity)
 		routerTodo.POST("", controller.CreateSingleActivity)
 		routerTodo.PATCH("/:id", controller.UpdateSingleActivity)
+		routerTodo.DELETE("/:id", controller.DeleteSingleActivity)
 	}
 
 }

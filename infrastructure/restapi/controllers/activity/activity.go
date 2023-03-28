@@ -159,3 +159,31 @@ func (c *Controller) UpdateSingleActivity(ctx *gin.Context) {
 		Data:    activitys,
 	})
 }
+
+// DeleteSingleActivity function delete a single activity based id
+func (c *Controller) DeleteSingleActivity(ctx *gin.Context) {
+	activityIDStr := ctx.Param("id")
+	activityID, err := strconv.ParseInt(activityIDStr, 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
+			Status:  "Not Found",
+			Message: ("Activity with ID " + activityIDStr + " Not Found"),
+		})
+		return
+	}
+
+	respID, err := c.ActivityService.DeleteActivity(ctx, activityID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
+			Status:  "Not Found",
+			Message: ("Activity with ID " + strconv.Itoa(int(respID)) + " Not Found"),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+		Status:  "Success",
+		Message: "Success",
+		Data:    gin.H{},
+	})
+}

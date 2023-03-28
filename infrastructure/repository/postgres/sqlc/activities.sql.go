@@ -35,6 +35,18 @@ func (q *Queries) CreateActivity(ctx context.Context, arg CreateActivityParams) 
 	return i, err
 }
 
+const deleteActivity = `-- name: DeleteActivity :one
+DELETE FROM activities
+WHERE id = $1
+RETURNING id
+`
+
+func (q *Queries) DeleteActivity(ctx context.Context, id int64) (int64, error) {
+	row := q.db.QueryRowContext(ctx, deleteActivity, id)
+	err := row.Scan(&id)
+	return id, err
+}
+
 const getActivities = `-- name: GetActivities :many
 SELECT id, title, email, created_at, updated_at, deleted_at FROM activities
 ORDER BY id DESC

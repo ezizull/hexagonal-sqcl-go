@@ -19,3 +19,8 @@ SET
     updated_at = now()
 WHERE id = $1
 RETURNING *;
+
+-- name: DeleteActivity :one
+DELETE FROM activities
+WHERE id = $1
+RETURNING id;
