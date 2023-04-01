@@ -55,7 +55,7 @@ func (c *Controller) GetTodos(ctx *gin.Context) {
 	}
 
 	todos := arrayToDomainMapper(todoResp)
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusOK, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    todos,
@@ -89,7 +89,7 @@ func (c *Controller) GetSingleTodo(ctx *gin.Context) {
 	}
 
 	todos := toDomainMapper(todoResp)
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusOK, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    todos,
@@ -132,7 +132,7 @@ func (c *Controller) CreateSingleTodo(ctx *gin.Context) {
 	}
 
 	todos := toDomainMapper(todoResp)
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusCreated, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    todos,
@@ -185,7 +185,7 @@ func (c *Controller) UpdateSingleTodo(ctx *gin.Context) {
 	}
 
 	todos := toDomainMapper(todoResp)
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusOK, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    todos,
@@ -206,14 +206,14 @@ func (c *Controller) DeleteSingleTodo(ctx *gin.Context) {
 
 	respID, err := c.TodoService.DeleteTodo(ctx, todoID)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
 			Status:  "Not Found",
 			Message: ("Todo with ID " + strconv.Itoa(int(respID)) + " Not Found"),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusOK, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    gin.H{},

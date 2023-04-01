@@ -32,7 +32,7 @@ func (c *Controller) GetActivities(ctx *gin.Context) {
 	}
 
 	activities := arrayToDomainMapper(activityResp)
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusOK, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    activities,
@@ -66,7 +66,7 @@ func (c *Controller) GetSingleActivity(ctx *gin.Context) {
 	}
 
 	activity := toDomainMapper(activityResp)
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusOK, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    activity,
@@ -101,7 +101,7 @@ func (c *Controller) CreateSingleActivity(ctx *gin.Context) {
 	}
 
 	activitys := toDomainMapper(activityResp)
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusCreated, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    activitys,
@@ -154,7 +154,7 @@ func (c *Controller) UpdateSingleActivity(ctx *gin.Context) {
 	}
 
 	activitys := toDomainMapper(activityResp)
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusOK, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    activitys,
@@ -175,14 +175,14 @@ func (c *Controller) DeleteSingleActivity(ctx *gin.Context) {
 
 	respID, err := c.ActivityService.DeleteActivity(ctx, activityID)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, controllers.ErrorResponse{
+		ctx.JSON(http.StatusNotFound, controllers.ErrorResponse{
 			Status:  "Not Found",
 			Message: ("Activity with ID " + strconv.Itoa(int(respID)) + " Not Found"),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusAccepted, controllers.DefaultResponse{
+	ctx.JSON(http.StatusOK, controllers.DefaultResponse{
 		Status:  "Success",
 		Message: "Success",
 		Data:    gin.H{},
