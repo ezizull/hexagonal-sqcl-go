@@ -1,39 +1,24 @@
 package postgres
 
 import (
-	"database/sql"
-	"fmt"
-
 	"hexagonal-sqlc/infrastructure/repository/postgres/sqlc"
 
 	_ "github.com/lib/pq"
 )
 
-// Database cradential
-var (
-	// host     = os.Getenv("DB_HOST")
-	// port     = os.Getenv("DB_PORT")
-	// username = os.Getenv("DB_USERNAME")
-	// password = os.Getenv("DB_PASSWORD")
-	// dbname   = os.Getenv("DB_POSGRES")
-
-	host     = "localhost"
-	port     = 5432
-	username = "root"
-	password = "root"
-	dbname   = "skyshi_gethired"
-)
-
 // NewSqlc is a function that returns a sqlc database connection
 func NewSqlc() (*sqlc.Queries, error) {
-	dbURL := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable TimeZone=Asia/Jakarta",
-		host, port, username, password, dbname)
-
-	db, err := sql.Open("postgres", dbURL)
+	var infoPg infoDatabasPostgres
+	err := infoPg.getPostgresConn("Databases.PostgreSQL.Localhost")
 	if err != nil {
 		return nil, err
 	}
 
-	queries := sqlc.New(db)
+	sqlDB, err := initPostgresDB(infoPg)
+	if err != nil {
+		return nil, err
+	}
+
+	queries := sqlc.New(sqlDB)
 	return queries, nil
 }
